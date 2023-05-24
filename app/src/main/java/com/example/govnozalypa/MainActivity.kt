@@ -161,8 +161,8 @@ fun DiplomField(value: String,
         placeholder = {
             Text(text = placeholder)
                       },
-    VisualTransformation = VisualTransformation,
-    KeyboardOptions = KeyboardOptions,
+        visualTransformation = visualTransformation,
+        keyboardOptions = keyboardOptions,
         leadingIcon = leadingIcon,
         trailingIcon = trailingIcon
     )
