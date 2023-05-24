@@ -1,12 +1,14 @@
 package com.example.govnozalypa
 
 import android.os.Bundle
+import android.widget.Button
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CutCornerShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -39,7 +41,6 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                    Login()
-
                    }
                 }
             }
@@ -89,7 +90,8 @@ fun Login() {
             Modifier
                 .fillMaxSize()
                 .padding(48.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceAround
         ) {
             LoginHeader()
             LoginFields(username,password, onPasswordChange = {
@@ -97,51 +99,82 @@ fun Login() {
             },
             onUsernameChange = {
                 username = it
+            },
+                onForgotPasswordClick = {
+
             })
-            LoginFooter()
+            LoginFooter(onSingInClick = {}, onSingUpClick = {})
         }
     }
 }
 
 @Composable
 fun LoginHeader() {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
+
     Text(text = "Добро пожаловать!", fontSize = 31.sp, fontWeight = FontWeight.ExtraBold)
     Text(text = "Войдите чтобы продолжить",
         fontSize = 18.sp,
         fontWeight = FontWeight.SemiBold
         )
 }
+}
 
 
 @Composable
 fun LoginFields(username:String,
                 password: String,
-                onUsernameChange:(String) -> Unit, onPasswordChange: (String) -> Unit) {
-    DiplomField(value = username,
-        label = "Username" ,
-        placeholder = "Введите email адрес",
-        onValueChange = onUsernameChange,
-        leadingIcon = {
-            Icon(Icons.Default.Email, contentDescription = "Email")
-        }
+                onUsernameChange:(String) -> Unit,
+                onPasswordChange: (String) -> Unit,
+                onForgotPasswordClick: () ->Unit
+) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        DiplomField(value = username,
+            label = "Email",
+            placeholder = "Введите email адрес",
+            onValueChange = onUsernameChange,
+            leadingIcon = {
+                Icon(Icons.Default.Email, contentDescription = "Email")
+            },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email, imeAction = ImeAction.Next)
         )
-    
-    Spacer(modifier = Modifier.height(8.dp))
-    
-    DiplomField(value = password,
-        label = "Password",
-        placeholder = "Введите пароль",
-        onValueChange = onPasswordChange,
-        visualTransformation = PasswordVisualTransformation(),
-        leadingIcon = {
-            Icon(Icons.Default.Lock, contentDescription = "Password")
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        DiplomField(value = password,
+            label = "Пароль",
+            placeholder = "Введите пароль",
+            onValueChange = onPasswordChange,
+            visualTransformation = PasswordVisualTransformation(),
+            leadingIcon = {
+                Icon(Icons.Default.Lock, contentDescription = "Password")
+            },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Go)
+        )
+
+        TextButton(onClick = onForgotPasswordClick, modifier = Modifier.align(Alignment.End)) {
+            Text(text = "Забыли пароль?")
+
         }
-    )
+    }
 }
 
 @Composable
-fun LoginFooter() {
-    
+fun LoginFooter(
+    onSingInClick: () -> Unit,
+    onSingUpClick: () -> Unit
+) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+    Button(onClick = onSingInClick,
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(50)) {
+        Text(text = "Вход")
+    }
+    TextButton(onClick = onSingUpClick) {
+        Text(text = "Нету аккаунта, нажмите здесь!")
+    }
+    }
 }
 
 @Composable
